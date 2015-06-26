@@ -1,0 +1,275 @@
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  line-height: 1em;
+  letter-spacing: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+button.btn {
+  width: 100%;
+  font-size: 1.1em;
+  margin: 0 auto;
+}
+
+.video-compare {
+  display: -webkit-box;
+  display: flex;
+  justify-content: center;
+  height: 640px;
+}
+
+.flex {
+  display: -webkit-box;
+  display: flex;
+}
+
+.horizontal-flex {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  flex-direction: column;
+}
+
+.center-flex {
+  display: -webkit-box;
+  display: flex;
+  align-items: center;
+}
+
+.center-flex .no-emphasis {
+  flex-grow: 0;
+}
+
+.center-flex .emphasis {
+  flex-grow: 1;
+}
+
+
+.reveal .slides .fancy-fragments {
+  height: 600px;
+}
+
+.reveal .slides .fancy-fragments .fragment {
+  transition: all 0.4s cubic-bezier(.17,.67,.58,1);
+  -webkit-transition: all 0.4s cubic-bezier(.17,.67,.58,1);
+
+  max-height: 95%;
+  opacity: 0;
+}
+
+.reveal .slides .fancy-fragments .fragment.visible {
+  max-height: 95%;
+  opacity: 1;
+}
+
+.reveal .slides .fancy-fragments .fragment.fancy-first:not(.visible) {
+  transform: translate3d(0, -999px, 0) scale3d(0.9, 0.9, 1);
+  -webkit-transform: translate3d(0, -999px, 0) scale3d(0.9, 0.9, 1);
+}
+
+.reveal .slides .fancy-fragments .fragment.fancy-second:not(.visible) {
+  transform: translate3d(0, 999px, 0) scale3d(0.9, 0.9, 1);
+  -webkit-transform: translate3d(0, 999px, 0) scale3d(0.9, 0.9, 1);
+}
+
+.reveal .slides .fancy-fragments .fragment.visible {
+  transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  -webkit-transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+}
+
+.reveal .slides .fancy-fragments .fragment img {
+  transition: none;
+  -webkit-transition: none;
+}
+
+.android-chart {
+  min-width: 310px;
+  height: 400px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.reveal .nice-table td {
+  padding-right: 1.5em;
+  padding-bottom: 0.5em;
+}
+
+.reveal .nice-table th {
+  padding-right: 3em;
+  padding-bottom: 0.5em;
+}
+
+.text-muted {
+  opacity: 0.4;
+}
+
+.reveal .footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  font-size: 0.5em;
+  transform: translate(0, 50px);
+  width: 100%;
+}
+
+.reveal .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 0.5em;
+  transform: translate(0, -50px);
+  width: 100%;
+}
+
+.sources li {
+  font-size: 0.7em !important;
+}
+
+.reveal img.inline-img {
+  display: inline-block;
+  border: 0;
+  background: none;
+  margin: 0;
+  box-shadow: none;
+  transform: translate(0, 20px);
+}
+
+@keyframes anim1-frames {
+  0% {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  100% {
+    transform: rotate3d(0, 0, 1, 360deg);
+  }
+}
+
+@keyframes anim2-frames {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  100% {
+    transform: scale3d(2, 2, 2);
+  }
+}
+
+@keyframes anim3-frames {
+  0% {
+    transform: translate3D(0, 0, 0);
+  }
+  25% {
+    transform: translate3D(50px, 0px, 0);
+  }
+
+  50% {
+    transform: translate3D(50px, 50px, 0);
+  }
+
+  75% {
+    transform: translate3D(0px, 50px, 0);
+  }
+
+  100% {
+    transform: translate3D(0px, 0px, 0);
+  }
+}
+
+@keyframes anim4-frames {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes anim5-frames {
+  0% {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  100% {
+    transform: rotate3d(0, 1, 0, 360deg);
+  }
+}
+
+@keyframes anim6-frames {
+  0% {
+    transform: translate3D(-150px, 0, 0);
+  }
+
+  100% {
+    transform: translate3D(200px, 0px, 0);
+  }
+}
+
+@keyframes anim7-frames {
+  0% {
+    opacity: 1;
+  }
+
+  33% {
+    opacity: 0;
+  }
+
+  66% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes anim8-frames {
+  0% {
+    transform: rotate3d(1, 0, 0, 0deg);
+  }
+  100% {
+    transform: rotate3d(1, 0, 0, 360deg);
+  }
+}
+
+@keyframes anim9-frames {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  100% {
+    transform: scale3d(3, 1, 1);
+  }
+}
+
+
+.anim1 {
+  animation: anim1-frames 2s infinite linear;
+}
+
+.anim2 {
+  animation: anim2-frames 1s infinite alternate ease-in-out;
+}
+
+.anim3 {
+  animation: anim3-frames 1.5s infinite ease-in-out;
+}
+
+.anim4 {
+  animation: anim4-frames 1s infinite alternate ease-in-out;
+}
+
+.anim5 {
+  animation: anim5-frames 2s infinite alternate linear;
+}
+
+.anim6 {
+  animation: anim6-frames 1s infinite alternate cubic-bezier(.645, .045, .355, 1);
+}
+
+.anim7 {
+  animation: anim7-frames 1s infinite alternate steps(1, end);
+}
+
+.anim8 {
+  animation: anim8-frames 1s infinite linear;
+}
+
+.anim9 {
+  animation: anim9-frames 0.5s infinite alternate cubic-bezier(.645, .045, .355, 1);
+}

@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Frontend data</title>
+
+		<meta name="description" content="Frontend data, Edge conf 2015">
+		<meta name="author" content="Nolan Lawson">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<link rel="stylesheet" href="index.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+		
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<section>
+          <h2>Frontend data</h2>
+          <h4>Nolan Lawson</h4>
+          <div class="footer">
+            <span class="text-muted">
+              Speaker notes are in the console
+            </span>
+          </div>
+          <aside class="notes">
+            Thanks for the introduction, Jake.
+            Hi everyone, I'm Nolan Lawson, and I'd like to set the stage
+            for a thrilling, fascinating, and often beguiling subject: offline data!
+            And yes, they have that in browsers now!
+          </aside>
+        </section>
+
+        <section>
+          <ul style="list-style-type: none;">
+            <li class="anim-holder"><span >ServiceWorkers</span></li>
+            <li class="anim-holder"><span >ApplicationCache</span></li>
+            <li class="anim-holder"><span >IndexedDB</span></li>
+            <li class="anim-holder"><span >File System API</span></li>
+            <li class="anim-holder"><span >WebSQL</span></li>
+            <li class="anim-holder"><span >FileReader</span></li>
+            <li class="anim-holder"><span >LocalStorage</span></li>
+            <li class="anim-holder"><span >SessionStorage</span></li>
+            <li class="anim-holder"><span >Cookies</span></li>
+
+          </ul>
+          <p class="fragment"> <!-- dummy to create a fragment event --></p>
+          <aside class="notes">
+            First off, I'd like to say that I think it's an exciting time to
+            be a web developer. Storage and caching APIs that we couldn't have
+            dreamed of 5 years ago are now landing in major browsers.
+            Nowadays, if anything, it's easy to get overwhelmed by the
+            smorgasbord of options.
+
+            But to keep a lavel head, I like to focus on the kinds of cool apps
+            that people are building with this technology. So let's look at a few.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/phpnet.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            This is a humble example of frontend data that I really like. PHP.net
+            has a very snappy search bar, which is built using nothing more
+            than LocalStorage. When you first go to the site, a fat 1MB ball of
+            JSON is downloaded to LocalStorage, and then the search box uses that.
+            Isaac Schlueter, creator of NPM, has said that he really admires
+            PHP.net and this search box because of how fast it is.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/devsummit1.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            Here's a more ambitious app, which Paul Lewis of the Google Chrome team made
+            for the Chrome dev summit.
+            Of course it looks great, with spiffy animations, and it shows
+            the whole conference schedule.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/devsummit2.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            This app is not only responsive; it also works offline! So it
+            fulfills a huge requirement of any decent conference app, which is
+            that it should work for conference-goers who might have a
+            spotty hotel wifi connection, are on roaming, or might have
+            no connection at all. You want to at least
+            be able to see the schedule while you're offline.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/devsummit_android.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            This starts to show how offline data can really blur the line between
+            a "website" and an "app." All of this is possible with just a simple website.
+            The user goes to a URL, and the app is "installed."
+            You can even save an icon to your homescreen, with a custom high-quality icon.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/devsummit_android2.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            Then you can launch the app while it's offline, and notice that it
+            has a custom, purple-tinted toolbar color, as well as a lack of
+            browser chrome. So it feels extra "appy."
+            This app is using Service Worker to achieve the offline capabilities,
+            and the rest is just meta tags on the HTML.
+          </aside>
+        </section>
+
+      <section>
+        <div>
+          <video height=680 src="vid/done.webm" loop data-autoplay></video>
+        </div>
+        <aside class="notes">
+          Can we go further with data storage? You bet! This is an app
+          built by PouchDB creator and Mozillian Dale Harvey, demonstrating
+          PouchDB's sync mechanism. Here I have three browsers open -
+          Chrome, Safari, and Firefox - and I'm showing off a simple
+          TodoMVC-like app, but with a twist: the data is being saved
+          and synced across all three browsers.
+        </aside>
+      </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/done2.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            If you go offline, the app not only continues working,
+            but it can also save data while offline. Then when
+            we come back online, the data gets synced back to all three browsers.
+            This is great for apps that want to allow you to log in from
+            any device, and still be able to have your data and sync it on the go.
+            This app uses ApplicationCache and PouchDB.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/devdocs.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            Here's a really useful one - devdocs.io. You can save the
+            documentation for various frameworks and APIs locally, then search
+            instantly and read the docs, all while offline. Notice how slick
+            the UI feels - that's the power of offline! You'd never get that
+            speed with a network request, even if you were on a fast desktop
+            connection.
+
+            This one uses raw IndexedDB and Application Cache.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/npmbrowser1.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            I was interested to see how far I could push offline
+            storage, so I also made this ridiculous showcase app called NPM Browser.
+            What it does is sync the entire NPM registry - the metadata
+            anyway - to your browser, which comes to a grand total of
+            818MB in WebSQL (Chrome) and 844MB in IndexedDB (Firefox).
+            Believe it or not, this works in Chrome, Firefox, Safari, and IE.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/npmbrowser3.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            You can search for NPM modules and see who maintains them,
+            what the current version is, or browse the readme.
+
+            If you go offline, you get a nice little notification
+            telling you that you're offline.
+            And when you come back online, it just starts syncing
+            again where it left off.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/npmbrowser4.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            And if you actually wait for this thing to sync all of NPM,
+            it switches into pure offline mode, polling for changing from NPM
+            in the background.
+            So since everything we need is now local, suddenly the
+            UI is super fast, because it doesn't need the server for anything!
+          </aside>
+        </section>
+
+        <section>
+          <div class="video-compare">
+            <div>
+              <video height=680 src="vid/npmbrowser_android.webm" loop data-autoplay></video>
+            </div>
+            <div>
+              <video height=680 src="vid/npmbrowser_ios.webm" loop data-autoplay></video>
+            </div>
+            <div>
+              <video height=680 src="vid/npmbrowser_fxos.webm" loop data-autoplay></video>
+            </div>
+          </div>
+
+          <aside class="notes">
+            Like the Dev Summit app, you can save it as a homescreen icon on
+            Android, iOS, or Firefox OS. All of this with
+            a single codebase! Unfortunately the iOS version
+            doesn't work so well because iOS Safari's WebSQL
+            is limited to 50MB, but you can't win 'em all.
+            Anyway, this app was about pushing limits.
+          </aside>
+        </section>
+
+        <section>
+          <h3>Frontend data == cool apps</h3>
+          <aside class="notes">
+            So I think I've demonstrated some cool things you can
+            do with offline data. I'm sure a lot of working web developers
+            would be surprised that any of this is even
+            possible. I feel that all of these APIs are thoroughly under-utilized.
+
+            But the panelists here are five of those stalwart souls who are
+            working to change that situation, so I want to highlight some of their work.
+          </aside>
+        </section>
+
+        <section>
+          <div>
+            <video height=680 src="vid/wikipedia.webm" loop data-autoplay></video>
+          </div>
+          <aside class="notes">
+            Jake Archibald has been tirelessly championing the offline
+            web for a long time, evangelizing many emerging web standards, such as
+            Promises, Application Cache, and Service Workers. He did
+            this cool Wikipedia app that works offline using Service
+            Workers. It even allows the user to choose which data to
+            store offline!
+          </aside>
+        </section>
+
+        <section>
+          <h2>Dexie.js</h2>
+          <img src="img/dexie.png" alt="Dexie.js"/>
+          <aside class="notes">
+            David Fahlander has pushed the boundaries of IndexedDB,
+            penning articles for the Mozilla Hacks blog, as well as writing
+            a shim to bring IE up to speed with the IndexedDB spec. One of his
+            most popular works is Dexie, which is a beautiful IndexedDB
+            wrapper that manages to be both low-level and yet easy to use.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Relay</h2>
+          <img src="img/relay.png" alt="Facebook Relay"/>
+          <aside class="notes">
+            Jing Chen works on the React/Flux team at Facebook, and has
+            been a major contributor to React Native. This year at React Conf,
+            she introduced us to the new Relay engine, which offers a
+            radical new philosophy for handling client-side data in React/Flux
+            apps. The idea is that each component is responsible for
+            its own data, both from the local cache and from the remote
+            server, leading less error-prone code that is still performant.
+          </aside>
+        </section>
+
+        <section>
+          <h2>LocalForage</h2>
+          <img src="img/localforage1.png" alt="LocalForage API"/>
+          <aside class="notes">
+            Matt MacPherson is a Mozillian, and author of LocalForage, which
+            is a JavaScript library that answers the question: what if IndexedDB
+            and WebSQL were as easy to work with as LocalStorage,
+            and what if there was a single API that worked across all three?
+            LocalStorage accomplishes this remarkable feat, abstracting away the
+            nitty-gritty details of the different storage APIs, while still
+            providing a svelte library that's under 30kB.
+          </aside>
+        </section>
+
+        <section>
+          <h2>PouchDB</h2>
+          <img src="img/pouchdb.png" alt="PouchDB"/>
+          <aside class="notes">
+            There's me, Nolan Lawson. I work at Squarespace, and I also
+            help maintain PouchDB.
+
+            PouchDB is a JavaScript implementation of the CouchDB API using
+            IndexedDB, WebSQL, and LocalStorage, as well as LevelDB in Node.js.
+            It can also run as its own CouchDB-like webserver, called PouchDB Server.
+            And since it speaks the CouchDB replication protocol, it can sync
+            with CouchDB or similar services like Cloudant and Couchbase.
+
+            And by the way, our logo is a kangaroo. Nobody ever seems to guess that!
+          </aside>
+        </section>
+
+        <section>
+          <h2>Cloudant</h2>
+          <img src="img/glynn.png" alt="Glynn Bird's homepage"/>
+          <aside class="notes">
+            Also here is Glynn Bird, who I've had the pleasure of collaborating with
+            on PouchDB pretty frequently. Glynn works for Cloudant, which is one of
+            the major contributors to the open-source CouchDB project and has a hosted
+            backend that is CouchDB-compatible (and therefore PouchDB compatible). So Glynn
+            has done lots of interesting work with offline apps that sync from the browser
+            to Cloudant.
+          </aside>
+        </section>
+
+        <section>
+          <h2>Let's talk frontend data!</h2>
+          <aside class="notes">
+            So back to Jake, and let's talk about frontend data!
+          </aside>
+        </section>
+      </div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+		<script src="js/jquery-1.9.1.js"></script>
+		<script src="js/highcharts.js"></script>
+		<script src="js/highcharts-exporting.js"></script>
+    <script src="js/ua.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+        fragments: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+
+      Reveal.addEventListener( 'slidechanged', function( event ) {
+        // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+        var notes = event.currentSlide.querySelector(".notes");
+        if(notes) {
+          console.info(notes.innerHTML.replace(/\n\s+/g,'\n'));
+        }
+      } );
+
+      Reveal.addEventListener('fragmentshown', function (e) {
+        // show the animations
+        $(e.target).find('li span').each(function (i, el) {
+          $(el).addClass('anim' + (i + 1));
+        });
+      });
+
+      Reveal.addEventListener('fragmenthidden', function (e) {
+        // hide the animations
+        $(e.target).find('li span').each(function (i, el) {
+          $(el).removeClass('anim' + (i + 1));
+        });
+      });
+
+      // log the first slide's notes as well
+      console.info(document.querySelector(
+        'section.present aside.notes').innerHTML.replace(/\n\s+/g,'\n'));
+
+      if (!UA.isChrome() && !UA.isFirefox() && !UA.isAndroid() && !UA.isOpera()) {
+        window.alert(
+          'Heads up! This presentation looks best in ' +
+          'Firefox/Chrome due to WEBM video and flexbox. Sorry!');
+      }
+    </script>
+
+	</body>
+</html>
