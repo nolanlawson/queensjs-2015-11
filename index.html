@@ -6,7 +6,7 @@
 
 		<title>Frontend data</title>
 
-		<meta name="description" content="Frontend data, Edge conf 2015">
+		<meta name="description" content="Frontend camp 2015, Understanding Promises">
 		<meta name="author" content="Nolan Lawson">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -43,7 +43,7 @@
 		<div class="reveal">
 			<div class="slides">
 				<section>
-          <h2>Frontend data</h2>
+          <h2>Understanding promises</h2>
           <h4>Nolan Lawson</h4>
           <div class="footer">
             <span class="text-muted">
@@ -51,316 +51,273 @@
             </span>
           </div>
           <aside class="notes">
-            Thanks for the introduction, Jake.
-            Hi everyone, I'm Nolan Lawson, and I'd like to set the stage
-            for a thrilling, fascinating, and often beguiling subject: offline data!
-            And yes, they have that in browsers now!
+            Hi everybody.
           </aside>
         </section>
 
         <section>
-          <ul style="list-style-type: none;">
-            <li class="anim-holder"><span >ServiceWorkers</span></li>
-            <li class="anim-holder"><span >ApplicationCache</span></li>
-            <li class="anim-holder"><span >IndexedDB</span></li>
-            <li class="anim-holder"><span >File System API</span></li>
-            <li class="anim-holder"><span >WebSQL</span></li>
-            <li class="anim-holder"><span >FileReader</span></li>
-            <li class="anim-holder"><span >LocalStorage</span></li>
-            <li class="anim-holder"><span >SessionStorage</span></li>
-            <li class="anim-holder"><span >Cookies</span></li>
 
-          </ul>
-          <p class="fragment"> <!-- dummy to create a fragment event --></p>
+          <img src="img/problem.png" alt="We have a problem with promises article"/>
+
           <aside class="notes">
-            First off, I'd like to say that I think it's an exciting time to
-            be a web developer. Storage and caching APIs that we couldn't have
-            dreamed of 5 years ago are now landing in major browsers.
-            Nowadays, if anything, it's easy to get overwhelmed by the
-            smorgasbord of options.
+            So the reason I'm standing in front of you right now
+            is because I wrote this article on promises.
 
-            But to keep a lavel head, I like to focus on the kinds of cool apps
-            that people are building with this technology. So let's look at a few.
+            I wrote this article, which has been described rather accurately
+            as a "tutorial disguised as a rant." That's pretty much what it is.
+
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/phpnet.webm" loop data-autoplay></video>
-          </div>
+          <img src="img/pouchdb-api.png" alt="PouchDB API screenshot"/>
           <aside class="notes">
-            This is a humble example of frontend data that I really like. PHP.net
-            has a very snappy search bar, which is built using nothing more
-            than LocalStorage. When you first go to the site, a fat 1MB ball of
-            JSON is downloaded to LocalStorage, and then the search box uses that.
-            Isaac Schlueter, creator of NPM, has said that he really admires
-            PHP.net and this search box because of how fast it is.
+
+            I wrote it because I work on a very promise-heavy open-source library
+            called PouchDB, and I was tired of perusing the questions on
+            Stack Overflow and seeing the same errors again and again.
+
+            Or rather, I was tired of having to explain everything again and again -
+            how not to use promises as if they were callbacks, how to
+            use for-loops within a promise, etc. So I did write it all
+            as a kind of rant, in one Saturday afternoon, and I've never seen any
+            article I've written blow up as much as this one. I got 500 new
+            Twitter followers in a few weeks, which for me means they doubled,
+            because I am not a superstar.
+
+            So apparently there was a big need for this kind of rant/tutorial.
+
+            I think the reason for that is that a lot of us are using promises
+            because we feel like we have to; it's good for us. Or rather,
+            promises kind of rushed onto the scene a few years ago, and we've
+            been struggling to keep up, especially with libraries that
+            kinda-implement promises or kinda-don't, or use this weird
+            promise from another dimension called "deferreds." Or they're migrating
+            from non-promises to promises, as Angular has, and it's kinda not
+            clear which is which.
+
+            But promises are being trumpted as the exciting new technology,
+            and a lot of us feel compelled to go along with it. So we dip our
+            toes in here and there, maybe try a taste of promsies in one
+            library, while in another library we're still clinging to our
+            familiar callback patterns like a life raft. All the while, we're
+            not really taking a step back and trying to figure out what
+            the point of all this stuff is, anyway.
+
+            That's what this talk is about. So if you've already read my article,
+            I can assure you you won't be bored, because there will be plenty of
+            new material. and if you haven't read it, don't worry, because I won't
+            leave you behind.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/devsummit1.webm" loop data-autoplay></video>
-          </div>
+          <img class="no-border" src="img/no-puns.png" alt="no promise puns"/>
           <aside class="notes">
-            Here's a more ambitious app, which Paul Lewis of the Google Chrome team made
-            for the Chrome dev summit.
-            Of course it looks great, with spiffy animations, and it shows
-            the whole conference schedule.
+
+            Oh and one more thing. I am sick to death of these "I promise to call
+            you back"-style puns, so you won't find them in this talk. OK, they
+            were funny the first time, I get it, but please, can we just agree
+            to stop with these? If I see one more of these, I'm going to start
+            a chane.org petition, I swear.
+
+
+
+
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/devsummit2.webm" loop data-autoplay></video>
-          </div>
+          <h3>Why do we need promises in JavaScript?</h3>
           <aside class="notes">
-            This app is not only responsive; it also works offline! So it
-            fulfills a huge requirement of any decent conference app, which is
-            that it should work for conference-goers who might have a
-            spotty hotel wifi connection, are on roaming, or might have
-            no connection at all. You want to at least
-            be able to see the schedule while you're offline.
+            Promises aren't unique to JavaScript, and they've gone by
+            other names in other languages - futures, thunks, etc. But
+            they're uniquely useful in JavaScript due to the design
+            of the language.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/devsummit_android.webm" loop data-autoplay></video>
-          </div>
+          <pre><code data-trim>
+public String readFile(String filename) throws IOException {
+  String output = "";
+  BufferedReader buff = new BufferedReader(
+    new InputStreamReader(new FileInputStream(new File(filename))));
+  while (buff.ready()) {
+    output += buff.readLine() + "\n";
+  }
+  buff.close();
+  return output;
+}
+          </code></pre>
           <aside class="notes">
-            This starts to show how offline data can really blur the line between
-            a "website" and an "app." All of this is possible with just a simple website.
-            The user goes to a URL, and the app is "installed."
-            You can even save an icon to your homescreen, with a custom high-quality icon.
+            Here's an example from Java. Now, what's
+            interesting here is that, from the point of view of a beginner,
+            there's no difference between this part of the code, "readLine()"
+            and the rest of tit. But if we were to promise this function
+            without our larger code, it'd probably be the readLine() that ends
+            up costing the most, especially if we're working with large files.
+            In short, bottlenecks tend to pile up exactly where we're doing these sorts
+            of InputStream operations.
+
+            You might asay that the IOException communicates that, but there are
+            plenty of parts of the Java core libraries that throw errors like
+            this, e.g. the JSON parser or SAX parser, which doesn't require any I/O.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/devsummit_android2.webm" loop data-autoplay></video>
-          </div>
-          <aside class="notes">
-            Then you can launch the app while it's offline, and notice that it
-            has a custom, purple-tinted toolbar color, as well as a lack of
-            browser chrome. So it feels extra "appy."
-            This app is using Service Worker to achieve the offline capabilities,
-            and the rest is just meta tags on the HTML.
-          </aside>
-        </section>
+          <pre><code data-trim>
+import requests;
 
-      <section>
-        <div>
-          <video height=680 src="vid/done.webm" loop data-autoplay></video>
-        </div>
-        <aside class="notes">
-          Can we go further with data storage? You bet! This is an app
-          built by PouchDB creator and Mozillian Dale Harvey, demonstrating
-          PouchDB's sync mechanism. Here I have three browsers open -
-          Chrome, Safari, and Firefox - and I'm showing off a simple
-          TodoMVC-like app, but with a twist: the data is being saved
-          and synced across all three browsers.
-        </aside>
-      </section>
+response = request.get('http://oursite.com/ourapi/');
+json = response.json()
+print json
 
-        <section>
-          <div>
-            <video height=680 src="vid/done2.webm" loop data-autoplay></video>
-          </div>
+          </code></pre>
           <aside class="notes">
-            If you go offline, the app not only continues working,
-            but it can also save data while offline. Then when
-            we come back online, the data gets synced back to all three browsers.
-            This is great for apps that want to allow you to log in from
-            any device, and still be able to have your data and sync it on the go.
-            This app uses ApplicationCache and PouchDB.
+            Here's an example from Python. Again, we really have no reason,
+            as a beginner, to suspect that that second line will probably
+            be much slower than any other line in our code. But of course an
+            experienced developer will know that this HTTP server could take
+            a very long time to respond, or not at all, so you better keep
+            an eye on that part of the code.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/devdocs.webm" loop data-autoplay></video>
-          </div>
+          <pre><code data-trim>
+var xhr = new XMLHttpRequest();
+xhr.onload = function () { /* handle error */ };
+xhr.error = function () { /* handle success */ };
+xhr.open('GET', 'http://oursite.com/ourapi/');
+          </code></pre>
           <aside class="notes">
-            Here's a really useful one - devdocs.io. You can save the
-            documentation for various frameworks and APIs locally, then search
-            instantly and read the docs, all while offline. Notice how slick
-            the UI feels - that's the power of offline! You'd never get that
-            speed with a network request, even if you were on a fast desktop
-            connection.
+            The guy who designed JavaScript, Brendan Eich, was pretty smart.
+            and one of the interesting design decisions he made for
+            JavaScript was to make it single-threaded, with callbacks for
+            AJAX requests. In JavaScript, this allows the single thread to
+            continue working, e.g. responding to user clicks or updating
+            the DOM, even when an HTTP request is ongoing.
 
-            This one uses raw IndexedDB and Application Cache.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/npmbrowser1.webm" loop data-autoplay></video>
-          </div>
+          <pre><code data-trim>
+var fs = require('fs');
+fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
+  if (err) {
+    // handle error
+  } else {
+    // handle success
+  }
+});
+          </code></pre>
           <aside class="notes">
-            I was interested to see how far I could push offline
-            storage, so I also made this ridiculous showcase app called NPM Browser.
-            What it does is sync the entire NPM registry - the metadata
-            anyway - to your browser, which comes to a grand total of
-            818MB in WebSQL (Chrome) and 844MB in IndexedDB (Firefox).
-            Believe it or not, this works in Chrome, Firefox, Safari, and IE.
+
+            This style continued with Node.js, and in fact it's the primary
+            reason Ryan Dahl chose JavaScript for his single-threaded server
+            framework. Here's a filesystem operation, which doesn't exist
+            in the browser, but which looks very similar to the ajax
+            request we saw earlier.
+
+            So, in JavaScript, it's extremely obvious when a piece of code
+            goes to the disk or to the network, because there's this
+            awkward callback style you have to deal with. And it turns out
+            this is kind of nice, because as this infographic shows,
+            the network is much slower than the disk, which is much slower
+            than anything done in-memory. My takeaway is: disk is about a
+            zillion times slower than in-memory, and the network is about
+            a zillion times slower than that.
+
+            So JavaScript makes it really obvious when you're going to disk
+            or the network, which can be nice for identifying bottlenecks
+            or for ensuring that your single-threaded language doesn't spend
+            any time waiting on I/O. And when webapps were using some light
+            jQuery for a few ajax requests, which were almost never chained
+            together, this was almost tolerable. But when Node.js came along,
+            it just ended up being a huge hassle to write everything in this
+            pyramid style when you just want to do a few I/O operations.
+
+            The Node community tried to solve this early on by standardizing
+            everything related to callbacks. But really this was just a convention,
+            and nobody was forced to adhere to it, and people frequently
+            messed it up. A common source of errors was accidentally calling
+            a callback twice, or zero times, or with both an error and
+            a result, etc. Lots of libraries sprang up proposing to solve
+            this problem, such as async and q. But in fact they had very different
+            and incompatible approaches, and jQuery and Angular had their own,
+            so out of all this mess a few very smart people managed to hammer
+            together a spec, and got almost everybody to agree on a small core
+            of best practices, which they called the Promises A+ spec. Today
+            this is enshrined in ES6, and it's in every major browser and soon
+            Node.js, so it's here for the long haul. The only major holdouts
+            are, sadly, jQuery and async. But you can convert their style to
+            the official style, or just not use them.
+
+            Okay, so everybody started using promises, and everything was great,
+            right? Well, not exactly. First off, there is some confusion
+            about which libraries and browsers actually use promises, and then
+            second off there is confusion about how to use promises correctly.
+            Let's talk about the libraries and browsers first.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/npmbrowser3.webm" loop data-autoplay></video>
-          </div>
           <aside class="notes">
-            You can search for NPM modules and see who maintains them,
-            what the current version is, or browse the readme.
 
-            If you go offline, you get a nice little notification
-            telling you that you're offline.
-            And when you come back online, it just starts syncing
-            again where it left off.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/npmbrowser4.webm" loop data-autoplay></video>
-          </div>
           <aside class="notes">
-            And if you actually wait for this thing to sync all of NPM,
-            it switches into pure offline mode, polling for changing from NPM
-            in the background.
-            So since everything we need is now local, suddenly the
-            UI is super fast, because it doesn't need the server for anything!
+
           </aside>
         </section>
 
         <section>
-          <div class="video-compare">
-            <div>
-              <video height=680 src="vid/npmbrowser_android.webm" loop data-autoplay></video>
-            </div>
-            <div>
-              <video height=680 src="vid/npmbrowser_ios.webm" loop data-autoplay></video>
-            </div>
-            <div>
-              <video height=680 src="vid/npmbrowser_fxos.webm" loop data-autoplay></video>
-            </div>
-          </div>
-
           <aside class="notes">
-            Like the Dev Summit app, you can save it as a homescreen icon on
-            Android, iOS, or Firefox OS. All of this with
-            a single codebase! Unfortunately the iOS version
-            doesn't work so well because iOS Safari's WebSQL
-            is limited to 50MB, but you can't win 'em all.
-            Anyway, this app was about pushing limits.
+
           </aside>
         </section>
 
         <section>
-          <h3>Frontend data == cool apps</h3>
           <aside class="notes">
-            So I think I've demonstrated some cool things you can
-            do with offline data. I'm sure a lot of working web developers
-            would be surprised that any of this is even
-            possible. I feel that all of these APIs are thoroughly under-utilized.
 
-            But the panelists here are five of those stalwart souls who are
-            working to change that situation, so I want to highlight some of their work.
           </aside>
         </section>
 
         <section>
-          <div>
-            <video height=680 src="vid/wikipedia.webm" loop data-autoplay></video>
-          </div>
           <aside class="notes">
-            Jake Archibald has been tirelessly championing the offline
-            web for a long time, evangelizing many emerging web standards, such as
-            Promises, Application Cache, and Service Workers. He did
-            this cool Wikipedia app that works offline using Service
-            Workers. It even allows the user to choose which data to
-            store offline!
+
           </aside>
         </section>
 
         <section>
-          <h2>Dexie.js</h2>
-          <img src="img/dexie.png" alt="Dexie.js"/>
           <aside class="notes">
-            David Fahlander has pushed the boundaries of IndexedDB,
-            penning articles for the Mozilla Hacks blog, as well as writing
-            a shim to bring IE up to speed with the IndexedDB spec. One of his
-            most popular works is Dexie, which is a beautiful IndexedDB
-            wrapper that manages to be both low-level and yet easy to use.
+
           </aside>
         </section>
 
         <section>
-          <h2>Relay</h2>
-          <img src="img/relay.png" alt="Facebook Relay"/>
           <aside class="notes">
-            Jing Chen works on the React/Flux team at Facebook, and has
-            been a major contributor to React Native. This year at React Conf,
-            she introduced us to the new Relay engine, which offers a
-            radical new philosophy for handling client-side data in React/Flux
-            apps. The idea is that each component is responsible for
-            its own data, both from the local cache and from the remote
-            server, leading less error-prone code that is still performant.
+
           </aside>
         </section>
 
         <section>
-          <h2>LocalForage</h2>
-          <img src="img/localforage1.png" alt="LocalForage API"/>
           <aside class="notes">
-            Matt MacPherson is a Mozillian, and author of LocalForage, which
-            is a JavaScript library that answers the question: what if IndexedDB
-            and WebSQL were as easy to work with as LocalStorage,
-            and what if there was a single API that worked across all three?
-            LocalStorage accomplishes this remarkable feat, abstracting away the
-            nitty-gritty details of the different storage APIs, while still
-            providing a svelte library that's under 30kB.
+
           </aside>
         </section>
 
         <section>
-          <h2>PouchDB</h2>
-          <img src="img/pouchdb.png" alt="PouchDB"/>
           <aside class="notes">
-            There's me, Nolan Lawson. I work at Squarespace, and I also
-            help maintain PouchDB.
 
-            PouchDB is a JavaScript implementation of the CouchDB API using
-            IndexedDB, WebSQL, and LocalStorage, as well as LevelDB in Node.js.
-            It can also run as its own CouchDB-like webserver, called PouchDB Server.
-            And since it speaks the CouchDB replication protocol, it can sync
-            with CouchDB or similar services like Cloudant and Couchbase.
-
-            And by the way, our logo is a kangaroo. Nobody ever seems to guess that!
           </aside>
         </section>
 
-        <section>
-          <h2>Cloudant</h2>
-          <img src="img/glynn.png" alt="Glynn Bird's homepage"/>
-          <aside class="notes">
-            Also here is Glynn Bird, who I've had the pleasure of collaborating with
-            on PouchDB pretty frequently. Glynn works for Cloudant, which is one of
-            the major contributors to the open-source CouchDB project and has a hosted
-            backend that is CouchDB-compatible (and therefore PouchDB compatible). So Glynn
-            has done lots of interesting work with offline apps that sync from the browser
-            to Cloudant.
-          </aside>
-        </section>
-
-        <section>
-          <h2>Let's talk frontend data!</h2>
-          <aside class="notes">
-            So back to Jake, and let's talk about frontend data!
-          </aside>
-        </section>
       </div>
 		</div>
 
