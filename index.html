@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Frontend data</title>
+		<title>Understanding Promises</title>
 
 		<meta name="description" content="Frontend camp 2015, Understanding Promises">
 		<meta name="author" content="Nolan Lawson">
@@ -76,14 +76,44 @@
             I wrote it because I work on a very promise-heavy open-source library
             called PouchDB, and I was tired of perusing the questions on
             Stack Overflow and seeing the same errors again and again.
+          </aside>
+        </section>
 
-            Or rather, I was tired of having to explain everything again and again -
+        <section>
+          <img src="img/stack_overflow.png" alt="Bad promises on Stack Overflow"/>
+          <aside class="notes">
+        Or rather, I was tired of having to explain everything again and again -
             how not to use promises as if they were callbacks, how to
             use for-loops within a promise, etc. So I did write it all
-            as a kind of rant, in one Saturday afternoon, and I've never seen any
-            article I've written blow up as much as this one. I got 500 new
-            Twitter followers in a few weeks, which for me means they doubled,
-            because I am not a superstar.
+            as a kind of rant, in one Saturday afternoon, and I was really surprised
+            at how popular it was. It's still getting shared on Twitter,
+            and I've gotten tons of feedback from people telling me how useful
+            it was.
+          </aside>
+        </section>
+            <section>
+              <h3>What is the difference between these 4 promises?</h3>
+          <pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  return doSomethingElse();
+});
+
+doSomething().then(function () {
+  doSomethingElse();
+});
+
+doSomething().then(doSomethingElse());
+
+doSomething().then(doSomethingElse);
+
+          </code></pre>
+              <aside class="notes">
+
+            Part of its popularity was due to starting off with this hook,
+            which was a quiz disguised to expose common errors with
+            promises. But part of it was also just people's general lack of
+            understanding of promises, and their need for a nice concise
+            explanation of common errors.
 
             So apparently there was a big need for this kind of rant/tutorial.
 
@@ -138,7 +168,8 @@
         </section>
 
         <section>
-          <pre><code data-trim>
+          <h3>Java</h3>
+          <pre><code class="java" data-trim>
 public String readFile(String filename) throws IOException {
   String output = "";
   BufferedReader buff = new BufferedReader(
@@ -167,10 +198,11 @@ public String readFile(String filename) throws IOException {
         </section>
 
         <section>
-          <pre><code data-trim>
+          <h3>Python</h3>
+          <pre><code class="python" data-trim>
 import requests;
 
-response = request.get('http://oursite.com/ourapi/');
+response = requests.get('http://oursite.com/ourapi/');
 json = response.json()
 print json
 
@@ -186,10 +218,26 @@ print json
         </section>
 
         <section>
-          <pre><code data-trim>
+          <h2>JavaScript is single-threaded</h2>
+        </section>
+
+        <section>
+          <img src="img/latency.png" alt="latency numbers all programmers should know"/>
+          <span class="text-muted">
+            https://gist.github.com/hellerbarde/2843375
+          </span>
+        </section>
+
+        <section>
+          <h3>JavaScript</h3>
+          <pre><code class="javascript" data-trim>
 var xhr = new XMLHttpRequest();
-xhr.onload = function () { /* handle error */ };
-xhr.error = function () { /* handle success */ };
+xhr.onerror = function (err) {
+  console.log('whoops, got an error', err);
+};
+xhr.onload = function (res) {
+  console.log('woohoo, got a response', res);
+};
 xhr.open('GET', 'http://oursite.com/ourapi/');
           </code></pre>
           <aside class="notes">
@@ -204,7 +252,32 @@ xhr.open('GET', 'http://oursite.com/ourapi/');
         </section>
 
         <section>
-          <pre><code data-trim>
+          <h3>JavaScript - jQuery ajax()</h3>
+          <pre><code class="javascript" data-trim>
+$.ajax("http://oursite.com/ourapi/", {
+  success: function (res) {
+    console.log("woohoo, got a response", res);
+  },
+  error: function (err) {
+    console.log("whoops, got an error", err);
+  }
+});
+console.log('firing request');
+          </code></pre>
+          <aside class="notes">
+            The guy who designed JavaScript, Brendan Eich, was pretty smart.
+            and one of the interesting design decisions he made for
+            JavaScript was to make it single-threaded, with callbacks for
+            AJAX requests. In JavaScript, this allows the single thread to
+            continue working, e.g. responding to user clicks or updating
+            the DOM, even when an HTTP request is ongoing.
+
+          </aside>
+        </section>
+
+        <section>
+          <h3>Node.js</h3>
+          <pre><code class="javascript" data-trim>
 var fs = require('fs');
 fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
   if (err) {
@@ -263,60 +336,228 @@ fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
             Let's talk about the libraries and browsers first.
           </aside>
         </section>
+        <section>
+        <img src="img/redemption.png" alt="redemption from callback hell screenshot"/>
+      </section>
 
         <section>
+          <h3>Node-style &#8594; Promise-style</h3>
+          <pre><code class="javascript" data-trim>
+var bluebird = require('bluebird');
+var fs = bluebird.promisifyAll(require('fs'));
+
+fs.readFileAsync('/tmp/myfile.txt', 'utf-8').then(function (text) {
+  // handle success
+}).catch(function (err) {
+  // handle error
+});
+          </code></pre>
+          </section>
+        <section>
+          <h3>Promises with a capital P</h3>
+          <ul>
+            <li>Promises/A+ spec</li>
+            <li>ES6 Promises (same thing)</li>
+          </ul>
+          <aside class="notes">
+
+          </aside>
+        </section>
+        <section>
+          <h3><code>window.Promise</code> in browsers</h3>
+          <img src="img/caniuse.png" alt="caniuse.com promises"/>
+          <aside class="notes">
+
+          </aside>
+        </section>
+        <section>
+          <h3><code>global.Promise</code> in Node/io.js</h3>
+          <ul>
+            <li><span style="color:red">&#10006;</span> Node 0.10</li>
+            <li><span style="color:green">&#10004;</span> Node 0.12</li>
+            <li><span style="color:green">&#10004;</span> io.js</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Promises in libraries</h3>
+          <ul>
+            <li>q</li>
+            <li>when</li>
+            <li>bluebird</li>
+            <li>lie</li>
+            <li>Angular $q</li>
+            <li>Ember RSVP</li>
+            <li>Flux/React (BYOP - bring your own promises)</li>
+            <li>More: <a href="https://promisesaplus.com/implementations">promisesaplus.com/implementations</a></li>
+          </ul>
           <aside class="notes">
 
           </aside>
         </section>
 
         <section>
-          <aside class="notes">
-
-          </aside>
+          <h3>Things that are not Promises</h3>
+          <ul>
+            <li>async</li>
+            <li>jQuery deferreds</li>
+            <li>Angular deferreds</li>
+            <li>Anything spelled "deferred"</li>
+          </ul>
         </section>
 
         <section>
-          <aside class="notes">
+          <h3>Things that are not Promises</h3>
+          <img src="img/async.png" alt="async thread on promises"/>
+        </section>
+        <section>
+          <h3>Standard Promise APIs</h3>
+                    <pre><code class="javascript" data-trim>
+var Promise = require('some-valid-library');
 
-          </aside>
+var promise = new Promise(function (resolve, reject) {
+  // roll your own promise inside here
+});
+
+promise.then();
+promise.catch();
+
+Promise.resolve();
+Promise.reject();
+Promise.all();
+Promise.race();
+                    </code></pre>
         </section>
 
         <section>
-          <aside class="notes">
-
-          </aside>
+          <h3>Promises - the one weird trick</h3>
+<pre><code class="javascript" data-trim>
+someLibrary.doSomething().then(function () {
+  // I'm inside a then() function!
+});
+</code></pre>
         </section>
 
         <section>
-          <aside class="notes">
+          <h3>Promises - the one weird trick</h3>
+<pre><code class="javascript" data-trim>
+someLibrary.doSomething().then(function () {
+  // 1) return another promise
+  return someLibrary.doSomethingElse();
 
-          </aside>
+  // 2) return a synchronous value
+  return {hooray: true};
+
+  // 3) throw a synchronous error
+  throw new Error('oh noes');
+});
+</code></pre>
         </section>
 
         <section>
-          <aside class="notes">
-
-          </aside>
+          <h3>Promises - the one weird trick</h3>
+<pre><code class="javascript" data-trim>
+someLibrary.doSomething().then(function () {
+  // do a bunch of fascinating stuff in here
+}).then(function (result) {
+  // handle the result
+}).catch(function (err) {
+  // handle any errors
+});
+</code></pre>
         </section>
 
         <section>
-          <aside class="notes">
-
-          </aside>
+          <h3>Promises - the one weird trick</h3>
+<pre><code class="javascript" data-trim>
+getUserByName('nolan').then(function (user) {
+  if (user.isLoggedOut()) {
+    throw new Error('user logged out!'); // throwing a synchronous error!
+  }
+  if (inMemoryCache[user.id]) {
+    return inMemoryCache[user.id];       // returning a synchronous value!
+  }
+  return getUserAccountById(user.id);    // returning a promise!
+}).then(function (userAccount) {
+  // I got a user account!
+}).catch(function (err) {
+  // Boo, I got an error!
+});
+</code></pre>
         </section>
 
         <section>
-          <aside class="notes">
-
-          </aside>
+          <h2>Anti-footgun artillery</h2>
         </section>
 
         <section>
-          <aside class="notes">
-
-          </aside>
+          <h3>Uncaught error - silently ignored :(</h3>
+          <img src="img/node_unhandled.png"/>
+          <img src="img/firefox_unhandled.png"/>
+          <div class="text-muted">Node, io.js, and most browsers don't log this.</div>
         </section>
+
+        <section>
+          <h3>Uncaught error - warning logged! :)</h3>
+          <img src="img/bluebird_unhandled.png"/>
+          <img src="img/chrome_unhandled.png"/>
+          <div class="text-muted">Bluebird and Chrome native Promises show warnings.</div>
+        </section>
+
+        <section>
+          <h3>io.js - unhandledRejection event</h3>
+          <img src="img/iojs1.png"/>
+          <img src="img/iojs2.png"/>
+
+        </section>
+        <section>
+          <h3>Async stacktraces in Chrome</h3>
+          <img src="img/chrome_async.png"/>
+        </section>
+
+        <section>
+          <h3>Bluebird 3.0 warnings</h3>
+          <img src="img/bluebird.png" alt="bluebird warnings"/>
+
+        </section>
+
+        <section>
+          <h2>Onward with ES7</h2>
+        </section>
+        <section>
+          <h3>With ES6 promises</h3>
+          <pre><code class="javascript">
+var db = new PouchDB('mydb');
+
+db.post({}).then(function (result) { // post a new doc
+  return db.get(result.id);          // fetch the doc
+}).then(function (doc) {
+  console.log(doc);                  // log the doc
+}).catch(function (err) {
+  console.log(err);                  // log any errors
+});
+          </code></pre>
+        </section>
+
+<section>
+  <h3>With ES7 async/await</h3>
+  <pre><code class="javascript">
+let db = new PouchDB('mydb');
+
+try {
+  let result = await db.post({});
+  let doc = await db.get(result.id);
+  console.log(doc);
+} catch (err) {
+  console.log(err);
+}
+  </code></pre>
+</section>
+
+<section>
+  <h3>
+    Promises are confusing. <br/>
+    ES7 will save us.</h3>
+</section>
 
       </div>
 		</div>
@@ -375,8 +616,10 @@ fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
       });
 
       // log the first slide's notes as well
-      console.info(document.querySelector(
-        'section.present aside.notes').innerHTML.replace(/\n\s+/g,'\n'));
+      var notes = document.querySelector('section.present aside.notes');
+      if (notes) {
+        console.info(notes.innerHTML.replace(/\n\s+/g, '\n'));
+      }
 
       if (!UA.isChrome() && !UA.isFirefox() && !UA.isAndroid() && !UA.isOpera()) {
         window.alert(
