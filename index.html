@@ -340,19 +340,28 @@ fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
         <img src="img/redemption.png" alt="redemption from callback hell screenshot"/>
       </section>
 
-        <section>
-          <h3>Node-style &#8594; Promise-style</h3>
-          <pre><code class="javascript" data-trim>
-var bluebird = require('bluebird');
-var fs = bluebird.promisifyAll(require('fs'));
-
-fs.readFileAsync('/tmp/myfile.txt', 'utf-8').then(function (text) {
-  // handle success
+              <section>
+                <h3>Promises to the rescue!</h3>
+                <pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  return doSomethingElse();
+}).then(function () {
+  return doAnotherThing();
+}).then(function (result) {
+  // yay, I'm done
 }).catch(function (err) {
-  // handle error
+  // boo, I got an error 
 });
-          </code></pre>
-          </section>
+                </code></pre>
+                </section>
+                <section>
+                  <h2>OK, how do I use promises?</h2>
+
+                  <aside class="notes">
+
+                  </aside>
+                </section>
+
         <section>
           <h3>Promises with a capital P</h3>
           <ul>
@@ -394,7 +403,19 @@ fs.readFileAsync('/tmp/myfile.txt', 'utf-8').then(function (text) {
 
           </aside>
         </section>
+                <section>
+                  <h3>Node-style &#8594; Promise-style</h3>
+                  <pre><code class="javascript" data-trim>
+var bluebird = require('bluebird');
+var fs = bluebird.promisifyAll(require('fs'));
 
+fs.readFileAsync('/tmp/myfile.txt', 'utf-8').then(function (text) {
+  // handle success
+}).catch(function (err) {
+  // handle error
+});
+                  </code></pre>
+                  </section>
         <section>
           <h3>Things that are not Promises</h3>
           <ul>
@@ -429,68 +450,16 @@ Promise.race();
         </section>
 
         <section>
-          <h3>Promises - the one weird trick</h3>
-<pre><code class="javascript" data-trim>
-someLibrary.doSomething().then(function () {
-  // I'm inside a then() function!
-});
-</code></pre>
-        </section>
-
-        <section>
-          <h3>Promises - the one weird trick</h3>
-<pre><code class="javascript" data-trim>
-someLibrary.doSomething().then(function () {
-  // 1) return another promise
-  return someLibrary.doSomethingElse();
-
-  // 2) return a synchronous value
-  return {hooray: true};
-
-  // 3) throw a synchronous error
-  throw new Error('oh noes');
-});
-</code></pre>
-        </section>
-
-        <section>
-          <h3>Promises - the one weird trick</h3>
-<pre><code class="javascript" data-trim>
-someLibrary.doSomething().then(function () {
-  // do a bunch of fascinating stuff in here
-}).then(function (result) {
-  // handle the result
-}).catch(function (err) {
-  // handle any errors
-});
-</code></pre>
-        </section>
-
-        <section>
-          <h3>Promises - the one weird trick</h3>
-<pre><code class="javascript" data-trim>
-getUserByName('nolan').then(function (user) {
-  if (user.isLoggedOut()) {
-    throw new Error('user logged out!'); // throwing a synchronous error!
-  }
-  if (inMemoryCache[user.id]) {
-    return inMemoryCache[user.id];       // returning a synchronous value!
-  }
-  return getUserAccountById(user.id);    // returning a promise!
-}).then(function (userAccount) {
-  // I got a user account!
-}).catch(function (err) {
-  // Boo, I got an error!
-});
-</code></pre>
-        </section>
-
-        <section>
           <h2>Anti-footgun artillery</h2>
         </section>
 
         <section>
           <h3>Uncaught error - silently ignored :(</h3>
+                              <pre><code class="javascript" data-trim>
+Promise.resolve().then(function () {
+  throw new Error("aw shucks");
+});
+                              </code></pre>
           <img src="img/node_unhandled.png"/>
           <img src="img/firefox_unhandled.png"/>
           <div class="text-muted">Node, io.js, and most browsers don't log this.</div>
