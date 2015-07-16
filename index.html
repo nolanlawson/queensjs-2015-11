@@ -339,6 +339,34 @@ fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
         <section>
         <img src="img/redemption.png" alt="redemption from callback hell screenshot"/>
       </section>
+                          <section>
+                            <h3>The pyramid of doom</h3>
+                            <pre><code class="javascript" data-trim>
+doSomething(function (err) {
+  if (err) { return handleError(err); }
+  doSomethingElse(function (err) {
+    if (err) { return handleError(err); }
+    doAnotherThing(function (err) {
+      if (err) { return handleError(err); }
+      // handle success
+    });
+  });
+});
+function handleError(err) {
+  // handle error
+}
+                            </code></pre>
+                            </section>
+                    <section>
+                      <h3>Promises to the rescue!</h3>
+                      <pre><code class="javascript" data-trim>
+doSomething().then(function (result) {
+  // handle success
+}).then(function (err) {
+  // handle error
+});
+                      </code></pre>
+                      </section>
 
               <section>
                 <h3>Promises to the rescue!</h3>
@@ -353,14 +381,113 @@ doSomething().then(function () {
   // boo, I got an error 
 });
                 </code></pre>
-                </section>
+                
                 <section>
-                  <h2>OK, how do I use promises?</h2>
+                  <h2>Top 3 worst promise errors</h2>
 
                   <aside class="notes">
 
                   </aside>
+                </section>                
                 </section>
+                
+                              <section>
+                                <h3>1. The promisey pyramid of doom</h3>
+                                <pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  doSomethingElse().then(function () {
+    doAnotherThing().then(function () {
+      // handle success
+    }).catch(function (err) {
+      // handle error
+    });
+  }).catch(function (err) {
+    // handle error
+  })
+}).catch(function (err) {
+  // handle error
+});
+                                </code></pre>
+                                </section>
+                                
+                                <section>
+                                  <h3>1. Solution: don't do that</h3>
+<pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  return doSomethingElse();
+}).then(function () {
+  return doAnotherThing();
+}).then(function (result) {
+  // handle success
+}).catch(function (err) {
+  // handle error
+});
+</code></pre>
+                                  <aside class="notes">
+
+                                  </aside>
+                                </section>
+                                
+  <section>
+    <h3>2. Forgetting to catch()</h3>
+    <pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  return doSomethingElse();
+}).then(function () {
+  return doAnotherThing();
+}).then(function (result) {
+  // handle success
+}); // ← forgot to catch. any errors will be swallowed
+          </code></pre>
+          </section>
+          
+            <section>
+              <h3>2. Solution: add a catch()</h3>
+              <pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  return doSomethingElse();
+}).then(function () {
+  return doAnotherThing();
+}).then(function (result) {
+  // handle success
+}).catch(console.log.bind(console)); // ← this is badass
+                    </code></pre>
+                    </section>
+                
+                            <section>
+                              <h3>3. Forgetting to return</h3>
+                              <pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  doSomethingElse();
+}).then(function () {
+  doAnotherThing();
+}).then(function (result) {
+  // doSomethingElse() and doAnotherThing()
+  // are not necessarily done yet.
+}).catch(console.log.bind(console));
+                                    </code></pre>
+                                    </section>
+                                                                <section>
+                                                                  <h3>3. Solution: always return or throw inside a then() function</h3>
+                                                                  <pre><code class="javascript" data-trim>
+doSomething().then(function () {
+  return doSomethingElse();
+}).then(function () {
+  return doAnotherThing();
+}).then(function (result) {
+  // yay, everything is done
+}).catch(console.log.bind(console));
+                                                                        </code></pre>
+                                                                        </section>                                    
+                                    
+   
+          <section>
+            <h2>OK, how do I use promises?</h2>
+
+            <aside class="notes">
+
+            </aside>
+          </section>                                           
 
         <section>
           <h3>Promises with a capital P</h3>
