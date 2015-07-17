@@ -561,7 +561,7 @@ someLibrary.doSomething().then(function () {
 <pre><code class="javascript" data-trim>
 db.get('user:nolan').then(function (user) {
   if (user.isLoggedOut()) {
-    throw new Error('user logged out!'); // throwing a synchronous error!
+    throw new Error('user logged out!');  // throwing a synchronous error!
   }
   if (inMemoryCache[user.id]) {
     return inMemoryCache[user.id];        // returning a synchronous value!
