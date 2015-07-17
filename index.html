@@ -44,7 +44,7 @@
 			<div class="slides">
 				<section>
           <h2>Understanding promises</h2>
-          <h4>Nolan Lawson</h4>
+          <h4>@nolanlawson</h4>
           <div class="footer">
             <span class="text-muted">
               Speaker notes are in the console
@@ -70,7 +70,18 @@
         </section>
 
         <section>
-          <img src="img/pouchdb-api.png" alt="PouchDB API screenshot"/>
+          <h3>Async code in PouchDB</h3>
+          <pre><code class="javascript">
+db.get('my_doc_id').then(function(doc) {
+  return db.remove(doc);
+}).then(function (result) {
+  return db.info();
+}).then(function (info) {
+  // yay I'm done
+}).catch(function (err) {
+  // ugh I got an error
+});
+          </code></pre>
           <aside class="notes">
 
             I wrote it because I work on a very promise-heavy open-source library
@@ -91,9 +102,10 @@
             it was.
           </aside>
         </section>
-            <section>
+            <section style="top: -40% !important">
               <h3>What is the difference between these 4 promises?</h3>
-          <pre><code class="javascript" data-trim>
+<div class="overlay-outer">
+<pre class="overlay-inner"><code class="javascript" data-trim>
 doSomething().then(function () {
   return doSomethingElse();
 });
@@ -105,8 +117,21 @@ doSomething().then(function () {
 doSomething().then(doSomethingElse());
 
 doSomething().then(doSomethingElse);
+</code></pre>
+<pre class="overlay-inner fragment"><code class="javascript" data-trim>
+doSomething().then(function () {       // <- good pattern
+  return doSomethingElse();
+});
 
-          </code></pre>
+doSomething().then(function () {       // <- trap!
+  doSomethingElse();
+});
+
+doSomething().then(doSomethingElse()); // <- trap!
+
+doSomething().then(doSomethingElse);   // <- good pattern
+</code></pre>
+</div>
               <aside class="notes">
 
             Part of its popularity was due to starting off with this hook,
@@ -339,9 +364,10 @@ fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
         <section>
         <img src="img/redemption.png" alt="redemption from callback hell screenshot"/>
       </section>
-                          <section>
+                          <section style="top: -40% !important">
                             <h3>The pyramid of doom</h3>
-                            <pre><code class="javascript" data-trim>
+<div class="overlay-outer">
+<pre class="overlay-inner"><code class="javascript" data-trim>
 doSomething(function (err) {
   if (err) { return handleError(err); }
   doSomethingElse(function (err) {
@@ -355,22 +381,39 @@ doSomething(function (err) {
 function handleError(err) {
   // handle error
 }
-                            </code></pre>
+</code></pre>
+<pre class="overlay-inner fragment"><code class="javascript" data-trim>
+doSomething(function (err) {
+  if (err) { return handleError(err); }     // wait why is my code
+  doSomethingElse(function (err) {
+    if (err) { return handleError(err); }   // on a deathmarch
+    doAnotherThing(function (err) {
+      if (err) { return handleError(err); } // to the right of the screen
+      // handle success
+    });
+  });
+});
+function handleError(err) {
+  // handle error
+}
+</code></pre>
+  </div>
                             </section>
                     <section>
                       <h3>Promises to the rescue!</h3>
                       <pre><code class="javascript" data-trim>
 doSomething().then(function (result) {
   // handle success
-}).then(function (err) {
+}).catch(function (err) {
   // handle error
 });
                       </code></pre>
                       </section>
 
-              <section>
+              <section style="top: -40% !important">
                 <h3>Promises to the rescue!</h3>
-                <pre><code class="javascript" data-trim>
+<div class="overlay-outer">
+<pre class="overlay-inner"><code class="javascript" data-trim>
 doSomething().then(function () {
   return doSomethingElse();
 }).then(function () {
@@ -378,9 +421,21 @@ doSomething().then(function () {
 }).then(function (result) {
   // yay, I'm done
 }).catch(function (err) {
-  // boo, I got an error 
+  // boo, I got an error
+});
+</code></pre>
+<pre class="overlay-inner fragment"><code class="javascript" data-trim>
+doSomething().then(function () {
+  return doSomethingElse();        //        ________
+}).then(function () {              //       |__MEOW__|
+  return doAnotherThing();         //          \_/
+}).then(function (result) {        //         /\_/\
+  // yay, I'm done                 //    ____/ o o \
+}).catch(function (err) {          //  /~____  =ø= /
+  // boo, I got an error           // (______)__m_m)
 });
                 </code></pre>
+</div>
                </section> 
                 <section>
                   <h2>Top 3 worst promise mistakes</h2>
@@ -462,7 +517,7 @@ doSomething().then(function () {
   doAnotherThing();
 }).then(function (result) {
   // doSomethingElse() and doAnotherThing()
-  // are not necessarily done yet.
+  // are not necessarily done yet!
 }).catch(console.log.bind(console));
                                     </code></pre>
                                     </section>
@@ -543,7 +598,7 @@ fs.readFileAsync('/tmp/myfile.txt', 'utf-8').then(function (text) {
                   </code></pre>
                   </section>
         <section>
-          <h3>Things that are not Promises</h3>
+          <h3>Things that are not Promises ಠ_ಠ</h3>
           <ul>
             <li>async</li>
             <li>jQuery deferreds</li>
@@ -553,7 +608,6 @@ fs.readFileAsync('/tmp/myfile.txt', 'utf-8').then(function (text) {
         </section>
 
         <section>
-          <h3>Things that are not Promises</h3>
           <img src="img/async.png" alt="async thread on promises"/>
         </section>
         <section>
@@ -653,6 +707,11 @@ try {
     Promises are confusing. <br/>
     ES7 will save us.</h3>
 </section>
+
+        <section>
+          <h3>@nolanlawson</h3>
+          <h4><a href="http://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html">"We have a problem with promises"</a></h4>
+        </section>
 
       </div>
 		</div>

@@ -138,3 +138,12 @@ button.btn {
   border: none;
   box-shadow: none;
 }
+
+.overlay-outer {
+  position: relative;
+}
+
+pre.overlay-inner {
+  position: absolute;
+  width: 100%;
+}
