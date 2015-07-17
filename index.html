@@ -59,14 +59,11 @@
           <img class="no-border" src="img/no-puns.png" alt="no promise puns"/>
           <aside class="notes">
 
-            Oh and one more thing. I am sick to death of these "I promise to call
-            you back"-style puns, so you won't find them in this talk. OK, they
+            Oh and one more thing. You won't find any "I promise to call you
+            back" jokes in this talk. OK, they
             were funny the first time, I get it, but please, can we just agree
             to stop with these? If I see one more of these, I'm going to start
-            a chane.org petition, I swear.
-
-
-
+            a change.org petition, I swear.
 
           </aside>
         </section>
@@ -118,7 +115,7 @@ db.get('my_doc_id').then(function(doc) {
             it was.
           </aside>
         </section>
-            <section style="top: -40% !important">
+            <section class="hoist">
               <h3>What is the difference between these 4 promises?</h3>
 <div class="overlay-outer">
 <pre class="overlay-inner"><code class="javascript" data-trim>
@@ -364,7 +361,7 @@ fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
         <section>
         <img src="img/redemption.png" alt="redemption from callback hell screenshot"/>
       </section>
-                          <section style="top: -40% !important">
+                          <section class="hoist">
                             <h3>The pyramid of doom</h3>
 <div class="overlay-outer">
 <pre class="overlay-inner"><code class="javascript" data-trim>
@@ -410,7 +407,7 @@ doSomething().then(function (result) {
                       </code></pre>
                       </section>
 
-              <section style="top: -40% !important">
+              <section class="hoist">
                 <h3>Promises to the rescue!</h3>
 <div class="overlay-outer">
 <pre class="overlay-inner"><code class="javascript" data-trim>
@@ -485,10 +482,10 @@ doSomething().then(function () {
   <section>
     <h3>2. Forgetting to catch()</h3>
     <pre><code class="javascript" data-trim>
-doSomething().then(function () {
-  return doSomethingElse();
+playWithFire().then(function () {
+  return liveDangerously();
 }).then(function () {
-  return doAnotherThing();
+  return betTheFarm();
 }).then(function (result) {
   // handle success
 }); // ← forgot to catch. any errors will be swallowed
@@ -498,10 +495,10 @@ doSomething().then(function () {
             <section>
               <h3>2. Solution: add a catch()</h3>
               <pre><code class="javascript" data-trim>
-doSomething().then(function () {
-  return doSomethingElse();
+playWithFire().then(function () {
+  return liveDangerously();
 }).then(function () {
-  return doAnotherThing();
+  return betTheFarm();
 }).then(function (result) {
   // handle success
 }).catch(console.log.bind(console)); // ← this is badass
@@ -511,23 +508,23 @@ doSomething().then(function () {
                             <section>
                               <h3>3. Forgetting to return</h3>
                               <pre><code class="javascript" data-trim>
-doSomething().then(function () {
-  doSomethingElse();
+goToTheATM().then(function () {
+  grabMyCash();
 }).then(function () {
-  doAnotherThing();
+  grabMyCard();
 }).then(function (result) {
-  // doSomethingElse() and doAnotherThing()
-  // are not necessarily done yet!
+  // grabMyCash() and grabMyCard()
+  // are not done yet!
 }).catch(console.log.bind(console));
                                     </code></pre>
                                     </section>
                                                                 <section>
                                                                   <h3>3. Solution: always return or throw inside a then() function</h3>
                                                                   <pre><code class="javascript" data-trim>
-doSomething().then(function () {
-  return doSomethingElse();
+goToTheATM().then(function () {
+  return grabMyCash();
 }).then(function () {
-  return doAnotherThing();
+  return grabMyCard();
 }).then(function (result) {
   // yay, everything is done
 }).catch(console.log.bind(console));

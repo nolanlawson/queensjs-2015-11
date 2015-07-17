@@ -147,3 +147,7 @@ pre.overlay-inner {
   position: absolute;
   width: 100%;
 }
+
+.hoist {
+  top: -40% !important;
+}
