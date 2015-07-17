@@ -564,7 +564,7 @@ db.get('user:nolan').then(function (user) {
     throw new Error('user logged out!'); // throwing a synchronous error!
   }
   if (inMemoryCache[user.id]) {
-    return inMemoryCache[user.id];       // returning a synchronous value!
+    return inMemoryCache[user.id];        // returning a synchronous value!
   }
   return db.get('account:' + user.id);    // returning a promise!
 }).then(function (userAccount) {
