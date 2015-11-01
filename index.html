@@ -137,7 +137,7 @@ fs.readFileAsync('myfile.txt')
         </section>
 
         <section>
-          <h3>JavaScript solves this with async</h3>
+          <h3>JavaScript XHR</h3>
           <pre><code class="javascript" data-trim>
 var xhr = new XMLHttpRequest();
 xhr.onerror = function (err) {
@@ -160,7 +160,7 @@ xhr.open('GET', 'http://oursite.com/ourapi/');
         </section>
 
         <section>
-          <h3>Node.js</h3>
+          <h3>Node.js fs</h3>
           <pre><code class="javascript" data-trim>
 var fs = require('fs');
 fs.readFile('/tmp/myfile.txt', 'utf-8', function (err, text) {
@@ -412,7 +412,7 @@ someLibrary.doSomething().then(function () {
           <h3>Promises - the one weird trick</h3>
 <pre><code class="javascript" data-trim>
 db.get('user:nolan').then(function (user) {
-  if (user.isLoggedOut()) {
+  if (user.isLoggedOut) {
     throw new Error('user logged out!');  // throwing a synchronous error!
   }
   if (inMemoryCache[user.id]) {
