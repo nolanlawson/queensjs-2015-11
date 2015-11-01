@@ -46,9 +46,6 @@
           <h2>Understanding promises</h2>
           <h4>@nolanlawson</h4>
           <div class="footer">
-            <span class="text-muted">
-              Speaker notes are in the console
-            </span>
           </div>
           <aside class="notes">
             Hi everybody.
@@ -83,99 +80,24 @@
         </section>
 
         <section>
-          <h3>Async code in PouchDB</h3>
-          <pre><code class="javascript">
-db.get('my_doc_id').then(function(doc) {
-  return db.remove(doc);
-}).then(function (result) {
-  return db.info();
-}).then(function (info) {
-  // yay I'm done
-}).catch(function (err) {
-  // ugh I got an error
+          <h3>Callbacks vs promises</h3>
+          <pre><code class="javascript">// callbacks
+fs.readFile('myfile.txt', function (err, contents) {
+  if (err) {
+    return handleError(err);
+  }
+  handleFile(contents);
 });
-          </code></pre>
+// promises
+fs.readFileAsync('myfile.txt')
+  .then(handleFile)
+  .catch(handleError)
+});</code></pre>
           <aside class="notes">
 
             I wrote it because I work on a very promise-heavy open-source library
             called PouchDB, and I was tired of perusing the questions on
             Stack Overflow and seeing the same errors again and again.
-          </aside>
-        </section>
-
-        <section>
-          <img src="img/stack_overflow.png" alt="Bad promises on Stack Overflow"/>
-          <aside class="notes">
-        Or rather, I was tired of having to explain everything again and again -
-            how not to use promises as if they were callbacks, how to
-            use for-loops within a promise, etc. So I did write it all
-            as a kind of rant, in one Saturday afternoon, and I was really surprised
-            at how popular it was. It's still getting shared on Twitter,
-            and I've gotten tons of feedback from people telling me how useful
-            it was.
-          </aside>
-        </section>
-            <section class="hoist">
-              <h3>What is the difference between these 4 promises?</h3>
-<div class="overlay-outer">
-<pre class="overlay-inner"><code class="javascript" data-trim>
-doSomething().then(function () {
-  return doSomethingElse();
-});
-
-doSomething().then(function () {
-  doSomethingElse();
-});
-
-doSomething().then(doSomethingElse());
-
-doSomething().then(doSomethingElse);
-</code></pre>
-<pre class="overlay-inner fragment"><code class="javascript" data-trim>
-doSomething().then(function () {       // <- good pattern
-  return doSomethingElse();
-});
-
-doSomething().then(function () {       // <- trap!
-  doSomethingElse();
-});
-
-doSomething().then(doSomethingElse()); // <- trap!
-
-doSomething().then(doSomethingElse);   // <- good pattern
-</code></pre>
-</div>
-              <aside class="notes">
-
-            Part of its popularity was due to starting off with this hook,
-            which was a quiz disguised to expose common errors with
-            promises. But part of it was also just people's general lack of
-            understanding of promises, and their need for a nice concise
-            explanation of common errors.
-
-            So apparently there was a big need for this kind of rant/tutorial.
-
-            I think the reason for that is that a lot of us are using promises
-            because we feel like we have to; it's good for us. Or rather,
-            promises kind of rushed onto the scene a few years ago, and we've
-            been struggling to keep up, especially with libraries that
-            kinda-implement promises or kinda-don't, or use this weird
-            promise from another dimension called "deferreds." Or they're migrating
-            from non-promises to promises, as Angular has, and it's kinda not
-            clear which is which.
-
-            But promises are being trumpted as the exciting new technology,
-            and a lot of us feel compelled to go along with it. So we dip our
-            toes in here and there, maybe try a taste of promsies in one
-            library, while in another library we're still clinging to our
-            familiar callback patterns like a life raft. All the while, we're
-            not really taking a step back and trying to figure out what
-            the point of all this stuff is, anyway.
-
-            That's what this talk is about. So if you've already read my article,
-            I can assure you you won't be bored, because there will be plenty of
-            new material. and if you haven't read it, don't worry, because I won't
-            leave you behind.
           </aside>
         </section>
 
@@ -190,101 +112,41 @@ doSomething().then(doSomethingElse);   // <- good pattern
         </section>
 
         <section>
-          <h3>Java</h3>
-          <pre><code class="java" data-trim>
-public String readFile(String filename) throws IOException {
-  String output = "";
-  BufferedReader buff = new BufferedReader(
-    new InputStreamReader(new FileInputStream(new File(filename))));
-  while (buff.ready()) {
-    output += buff.readLine() + "\n";
-  }
-  buff.close();
-  return output;
-}
-          </code></pre>
-          <aside class="notes">
-            Here's an example from Java. Now, what's
-            interesting here is that, from the point of view of a beginner,
-            there's no difference between this part of the code, "readLine()"
-            and the rest of tit. But if we were to promise this function
-            without our larger code, it'd probably be the readLine() that ends
-            up costing the most, especially if we're working with large files.
-            In short, bottlenecks tend to pile up exactly where we're doing these sorts
-            of InputStream operations.
-
-            You might asay that the IOException communicates that, but there are
-            plenty of parts of the Java core libraries that throw errors like
-            this, e.g. the JSON parser or SAX parser, which doesn't require any I/O.
-          </aside>
-        </section>
-
-        <section>
-          <h3>Python</h3>
-          <pre><code class="python" data-trim>
-import requests;
-
-response = requests.get('http://oursite.com/ourapi/');
-json = response.json()
-print json
-
-          </code></pre>
-          <aside class="notes">
-            Here's an example from Python. Again, we really have no reason,
-            as a beginner, to suspect that that second line will probably
-            be much slower than any other line in our code. But of course an
-            experienced developer will know that this HTTP server could take
-            a very long time to respond, or not at all, so you better keep
-            an eye on that part of the code.
-          </aside>
-        </section>
-
-        <section>
           <h2>JavaScript is single-threaded</h2>
         </section>
 
         <section>
-          <img src="img/latency.png" alt="latency numbers all programmers should know"/>
+          <div>
+            <video height=680 src="vid/kirby_blocked.webm" loop data-autoplay></video>
+          </div>
+        </section>
+
+        <section>
+
+          <div style="position:relative;width:918px;height:462px;">
+            <img style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:1" class="" src="img/latency.png" alt="latency numbers all programmers should know"/>
+            <img style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:2"  class="fragment" src="img/latency-annotated.png" alt="latency numbers all programmers should know"/>
+            <img style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:3"  class="fragment" src="img/latency-annotated-2.png" alt="latency numbers all programmers should know"/>
+            <img style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:4"  class="fragment" src="img/latency-annotated-3.png" alt="latency numbers all programmers should know"/>
+            <img style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:5"  class="fragment" src="img/latency-annotated-4.png" alt="latency numbers all programmers should know"/>
+            <img style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:6"  class="fragment" src="img/latency-annotated-5.png" alt="latency numbers all programmers should know"/>
+          </div>
           <span class="text-muted">
             https://gist.github.com/hellerbarde/2843375
           </span>
         </section>
 
         <section>
-          <h3>JavaScript</h3>
+          <h3>JavaScript solves this with async</h3>
           <pre><code class="javascript" data-trim>
 var xhr = new XMLHttpRequest();
 xhr.onerror = function (err) {
-  console.log('whoops, got an error', err);
+  // handle success
 };
 xhr.onload = function (res) {
-  console.log('woohoo, got a response', res);
+  // handle error
 };
 xhr.open('GET', 'http://oursite.com/ourapi/');
-          </code></pre>
-          <aside class="notes">
-            The guy who designed JavaScript, Brendan Eich, was pretty smart.
-            and one of the interesting design decisions he made for
-            JavaScript was to make it single-threaded, with callbacks for
-            AJAX requests. In JavaScript, this allows the single thread to
-            continue working, e.g. responding to user clicks or updating
-            the DOM, even when an HTTP request is ongoing.
-
-          </aside>
-        </section>
-
-        <section>
-          <h3>JavaScript - jQuery ajax()</h3>
-          <pre><code class="javascript" data-trim>
-$.ajax("http://oursite.com/ourapi/", {
-  success: function (res) {
-    console.log("woohoo, got a response", res);
-  },
-  error: function (err) {
-    console.log("whoops, got an error", err);
-  }
-});
-console.log('firing request');
           </code></pre>
           <aside class="notes">
             The guy who designed JavaScript, Brendan Eich, was pretty smart.
@@ -396,16 +258,6 @@ function handleError(err) {
 </code></pre>
   </div>
                             </section>
-                    <section>
-                      <h3>Promises to the rescue!</h3>
-                      <pre><code class="javascript" data-trim>
-doSomething().then(function (result) {
-  // handle success
-}).catch(function (err) {
-  // handle error
-});
-                      </code></pre>
-                      </section>
 
               <section class="hoist">
                 <h3>Promises to the rescue!</h3>
@@ -583,30 +435,13 @@ db.get('user:nolan').then(function (user) {
           </section>                                           
 
         <section>
-          <h3>Promises with a capital P</h3>
-          <ul>
-            <li>Promises/A+ spec</li>
-            <li>ES6 Promises (same thing)</li>
-          </ul>
-          <aside class="notes">
-
-          </aside>
-        </section>
-        <section>
           <h3><code>window.Promise</code> in browsers</h3>
           <img src="img/caniuse.png" alt="caniuse.com promises"/>
           <aside class="notes">
 
           </aside>
         </section>
-        <section>
-          <h3><code>global.Promise</code> in Node/io.js</h3>
-          <ul>
-            <li><span style="color:red">&#10006;</span> Node 0.10</li>
-            <li><span style="color:green">&#10004;</span> Node 0.12</li>
-            <li><span style="color:green">&#10004;</span> io.js</li>
-          </ul>
-        </section>
+
         <section>
           <h3>Promises in libraries</h3>
           <ul>
@@ -649,25 +484,6 @@ fs.readFileAsync('/tmp/myfile.txt', 'utf-8').then(function (text) {
 
 
         <section>
-          <h3>Standard Promise APIs</h3>
-                    <pre><code class="javascript" data-trim>
-var Promise = require('some-valid-library');
-
-var promise = new Promise(function (resolve, reject) {
-  // roll your own promise inside here
-});
-
-promise.then();
-promise.catch();
-
-Promise.resolve();
-Promise.reject();
-Promise.all();
-Promise.race();
-                    </code></pre>
-        </section>
-
-        <section>
           <h2>Anti-footgun artillery</h2>
         </section>
 
@@ -680,7 +496,7 @@ Promise.resolve().then(function () {
                               </code></pre>
           <img src="img/node_unhandled.png"/>
           <img src="img/firefox_unhandled.png"/>
-          <div class="text-muted">Node, io.js, and most browsers don't log this.</div>
+          <div class="text-muted">Node.js and non-Chrome browsers don't log this.</div>
         </section>
 
         <section>
@@ -690,12 +506,7 @@ Promise.resolve().then(function () {
           <div class="text-muted">Bluebird and Chrome native Promises show warnings.</div>
         </section>
 
-        <section>
-          <h3>io.js - unhandledRejection event</h3>
-          <img src="img/iojs1.png"/>
-          <img src="img/iojs2.png"/>
 
-        </section>
         <section>
           <h3>Async stacktraces in Chrome</h3>
           <img src="img/chrome_async.png"/>
@@ -716,40 +527,55 @@ Promise.resolve().then(function () {
           <img src="img/bluebird.png" alt="bluebird warnings"/>
 
         </section>
+        <section>
+          <img src="img/calvin.png"/>
+        </section>
+
 
         <section>
-          <h2>Onward with ES7</h2>
+          <h2>Onward with ES7 async/await</h2>
         </section>
         <section>
-          <h3>With ES6 promises</h3>
-          <pre><code class="javascript">
-var db = new PouchDB('mydb');
-
-db.post({}).then(function (result) { // post a new doc
-  return db.get(result.id);          // fetch the doc
-}).then(function (doc) {
-  console.log(doc);                  // log the doc
-}).catch(function (err) {
-  console.log(err);                  // log any errors
-});
-          </code></pre>
+          <h3>With ES6</h3>
+          <pre><code class="javascript">function createDocAndReturnIt() {
+  return db.post({}).then(function (result) {
+    return db.get(result.id);
+  });
+}</code></pre>
         </section>
 
 <section>
   <h3>With ES7 async/await</h3>
-  <pre><code class="javascript">
-let db = new PouchDB('mydb');
-
-try {
+  <pre><code class="javascript">async function createDocAndFetchIt() {
   let result = await db.post({});
-  let doc = await db.get(result.id);
-  console.log(doc);
-} catch (err) {
-  console.log(err);
-}
-  </code></pre>
+  return await db.get(result.id);
+}</code></pre>
+</section>
+<section>
+  <h3>With ES6 (more complex)</h3>
+  <pre><code class="javascript">function getDocOrEmpty(id) {
+  db.get(id).catch(function (err) {
+    if (err.status === 404) { // not found
+      return {}; // empty doc
+    }
+    throw err; // some error other than 404
+  });
+});</code></pre>
 </section>
 
+        <section>
+          <h3>With ES7 async/await (more complex)</h3>
+  <pre><code class="javascript">async function getDocOrEmpty(id) {
+  try {
+    return await db.get(id);
+  } catch (err) {
+    if (err.status === 404) { // not found
+      return {}; // empty doc
+    }
+    throw err; // some error other than 404
+  }
+}</code></pre>
+        </section>
 <section>
   <h3>
     Promises are confusing. <br/>
